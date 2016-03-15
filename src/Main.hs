@@ -121,7 +121,7 @@ getUnits = do
 getUnits' :: IO [Unit]
 getUnits' = do
   conn <- open dbFile
-  r <- query conn "SELECT * FROM unit" [] :: IO [Unit]
+  r <- query conn "SELECT * FROM unit" () :: IO [Unit]
   return r
 
 
@@ -140,9 +140,9 @@ main = scotty 3000 $ do
     unit <- param "unit"
     r <- createUnit unit
     if (successR r) then
-      redirect "/units/success/"
+      redirect "/units"
     else
-      redirect "/units/error/"
+      error "Unit could not be created"
   get "/get-units" $ do
     us <- getUnits
     json us
