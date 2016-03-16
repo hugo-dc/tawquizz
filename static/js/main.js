@@ -47,4 +47,8 @@ var callBackend = function(url, fun)
     xhttp.send();
 }
 
-
+var getUnitId = function(url)
+{
+    console.log(url);
+    return 1;
+}

@@ -5,14 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>TAWQuizz 0.1 - Units</title>
+    <title>TAWQuizz 0.1 - Unit Overview</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <script src="js/main.js" type="text/javascript"></script>
-    <script>
-      var unit_id = getUnitId(window.location.href);
-    </script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -25,13 +21,15 @@
       <div class="jumbotron">
       </div>
       <div class="col-12x">
-	<h1>Units</h1>
+	<h1 id="utitle"></h1>
 	<div>
 	  <ul id="units"></ul>
 	</div>
 	<button type="button" class="btn btn-primary"
-		onclick="goto('create-unit');">Create Unit</button>
-	<button type="button" class="btn btn-default" onclick="goto('quizz/all')">All Units Quizz</button>
+		onclick="goto('/create-question/' + unit_id);">Add question</button>
+	<button type="button" class="btn btn-default"
+		onclick="goto('/quizz/' + unit_id)">Quizz</button>
+	<button type="button" class="btn btn-default" onclick="goto('/');">Cancel</button>
       </div>
 
     </div>
@@ -40,5 +38,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+
+    <script src="/js/main.js" type="text/javascript"></script>
+    <script>
+      var unit_id = getUnitId(window.location.href);
+      var t = document.getElementById('utitle');
+      t.innerHTML = "Unit " + unit_id;
+      console.log(t);
+    </script>
+    
   </body>
 </html>    

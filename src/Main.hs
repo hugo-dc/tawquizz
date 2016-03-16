@@ -168,4 +168,7 @@ main = scotty 3000 $ do
   get "/startup" $ do
     res <- startup
     json res
+  get "/create-question/:unid/" $ do
+--    unid <- param "unid"
+    file "static/create-question.html"
 

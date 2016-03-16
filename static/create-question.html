@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>TAWQuizz 0.1 - Create Question</title>
+
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+      </div>
+      <div class="col-12x">
+	<h1 id="utitle"></h1>
+	<form action="/save-question" method="post">
+	  <div class="form-group">
+	    <label for="question">Question:</label>
+	    <input type="text" class="form-control" id="question"
+		   placeholder="Add the question here...">
+	  </div>
+	  <!-- Answers -->
+	  <div class="form-group">
+	    <label for="ans1">Posible Answers:</label>
+	    <input type="text" class="form-control" id="ans1"
+		     placeholder="Option 1...">
+	  </div>
+	  <div class="form-group">
+	    <label>
+	      <input type="checkbox"> Correct
+	    </label>
+	  </div>
+	  <div class="form-group">
+	    <input type="text" class="form-control" id="ans2"
+		     placeholder="Option 2...">
+	  </div>
+	  <div class="form-group">
+	    <label>
+	      <input type="checkbox"> Correct
+	    </label>
+	  </div>
+	  <div class="form-group">
+	    <input type="text" class="form-control" id="ans3"
+		     placeholder="Option 3...">
+	  </div>
+	  <div class="form-group">
+	    <label>
+	      <input type="checkbox"> Correct
+	    </label>
+	  </div>
+
+	  <div class="form-group">
+	    <input type="text" class="form-control" id="ans4"
+		     placeholder="Option 4...">
+	  </div>
+	  <div class="form-group">
+	    <label>
+	      <input type="checkbox"> Correct
+	    </label>
+	  </div>
+
+	  <div class="form-group">
+	    <input type="text" class="form-control" id="ans5"
+		     placeholder="Option 5...">
+	  </div>
+	  <div class="form-group">
+	    <label>
+	      <input type="checkbox"> Correct
+	    </label>
+	  </div>
+	  <div class="form-group">
+	    <input type="text" class="form-control" id="ans6"
+		     placeholder="Option 6...">
+	  </div>
+	  <div class="form-group">
+	    <label>
+	      <input type="checkbox"> Correct
+	    </label>
+	  </div>
+	  
+	  <button type="submit" class="btn btn-primary"
+		  onclick="goto('/create-question/' + unit_id);">Save</button>
+	  <button type="button" class="btn btn-default" onclick="goto('/');">Finish</button>
+	</form>
+      </div>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="/js/main.js" type="text/javascript"></script>
+    <script>
+      var unit_id = getUnitId(window.location.href);
+      var t = document.getElementById('utitle');
+      t.innerHTML = "Unit " + unit_id;
+      console.log(t);
+    </script>
+    
+  </body>
+</html>    
