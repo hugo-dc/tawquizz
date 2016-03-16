@@ -22,6 +22,13 @@ var loadUnits = function(data)
     console.log(JSON.stringify(json));
     for(i=0;i < json.length; i++){
         console.log(JSON.stringify(json[i]));
+	var li = document.createElement("LI");
+	var tx = document.createTextNode(json[i].unName);
+	var a = document.createElement("a");
+	a.appendChild(tx);
+	a.href = "http://localhost:3000/unit/" + json[i].unId;
+	li.appendChild(a);
+	ul.appendChild(li);
     }
 }
 

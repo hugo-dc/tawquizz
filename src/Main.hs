@@ -27,7 +27,8 @@ data Unit = Unit {
 data Question = Question {
   quId   :: Int,
   quUnit :: Int,
-  quText :: String
+  quText :: String,
+  quExpl :: String
   } deriving (Show, Generic)
 
 data Answer = Answer {
@@ -63,7 +64,7 @@ createTab t conn
   | t == "question" = do
       execute_
         conn
-        "CREATE TABLE question (id INTEGER PRIMARY KEY, parent INT, text TEXT)"
+        "CREATE TABLE question (id INTEGER PRIMARY KEY, parent INT, text TEXT, explanation TEXT)"
   | t == "answer" = do
       execute_
         conn
@@ -146,6 +147,25 @@ main = scotty 3000 $ do
   get "/get-units" $ do
     us <- getUnits
     json us
+  get "/unit/:unid" $ do
+--    unid <- param "unid"
+    file "static/unit.html"
   get "/startup" $ do
     res <- startup
     json res
+  get "/create-unit" $ do
+    file "static/create-unit.html"
+  get "/create-unit/:unit" $ do
+    unit <- param "unit"
+    r <- createUnit unit
+    if (successR r) then
+      redirect "/units"
+    else
+      error "Unit could not be created"
+  get "/get-units" $ do
+    us <- getUnits
+    json us
+  get "/startup" $ do
+    res <- startup
+    json res
+
