@@ -171,4 +171,7 @@ main = scotty 3000 $ do
   get "/create-question/:unid/" $ do
 --    unid <- param "unid"
     file "static/create-question.html"
+  posr "/save-question"
+    d <- body
+    let n = decode d :: Maybe Question
 
