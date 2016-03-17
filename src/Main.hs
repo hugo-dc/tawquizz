@@ -31,12 +31,24 @@ data Question = Question {
   quExpl :: String
   } deriving (Show, Generic)
 
+data CrQuestion = CrQuestion {
+  cqUnit :: Int,
+  cqText :: String,
+  cqExpl :: String
+  } deriving (Show, Generic)
+
 data Answer = Answer {
   anId      :: Int,
   anParent  :: Int,
   anText    :: String,
   anCorrect :: Bool
 } deriving(Show, Generic)
+
+data CrAnswer = CrAnswer {
+  caParent :: Int,
+  caText   :: String,
+  caCorrect :: Bool
+  } deriving (Show, Generic)
 
 instance ToJSON Result
 instance FromJSON Result
@@ -169,9 +181,14 @@ main = scotty 3000 $ do
     res <- startup
     json res
   get "/create-question/:unid/" $ do
---    unid <- param "unid"
     file "static/create-question.html"
-  posr "/save-question"
+  post "/save-question" $ do
     d <- body
-    let n = decode d :: Maybe Question
+    let n = decode d :: Maybe CrQuestion
+    case n of
+      Just question -> do
+        qId <- saveQuestion (cqUnit question) (cqText question) (cqExpl question)
+        json qId
+      otherwise -> error "Question not created"
+
 

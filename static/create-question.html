@@ -22,73 +22,73 @@
       </div>
       <div class="col-12x">
 	<h1 id="utitle"></h1>
-	<form action="/save-question" method="post">
+	<form>
 	  <div class="form-group">
 	    <label for="question">Question:</label>
 	    <input type="text" class="form-control" id="question"
 		   placeholder="Add the question here...">
 	  </div>
 	  <!-- Answers -->
-	  <div class="form-group">
+	  <div class="form-group" id="fans1">
 	    <label for="ans1">Posible Answers:</label>
 	    <input type="text" class="form-control" id="ans1"
-		     placeholder="Option 1...">
+		     oninput="checkNext(1)">
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans1c">
 	    <label>
 	      <input type="checkbox"> Correct
 	    </label>
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans2">
 	    <input type="text" class="form-control" id="ans2"
-		     placeholder="Option 2...">
+		     oninput="checkNext(2)">	    
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans2c">
 	    <label>
 	      <input type="checkbox"> Correct
 	    </label>
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans3">
 	    <input type="text" class="form-control" id="ans3"
-		     placeholder="Option 3...">
+	    		     oninput="checkNext(3)">
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans3c">
 	    <label>
 	      <input type="checkbox"> Correct
 	    </label>
 	  </div>
 
-	  <div class="form-group">
+	  <div class="form-group" id="fans4">
 	    <input type="text" class="form-control" id="ans4"
-		     placeholder="Option 4...">
+	    		     oninput="checkNext(4)">
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans4c">
 	    <label>
 	      <input type="checkbox"> Correct
 	    </label>
 	  </div>
 
-	  <div class="form-group">
+	  <div class="form-group" id="fans5">
 	    <input type="text" class="form-control" id="ans5"
-		     placeholder="Option 5...">
+	    		     oninput="checkNext(5)">
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans5c">
 	    <label>
 	      <input type="checkbox"> Correct
 	    </label>
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans6">
 	    <input type="text" class="form-control" id="ans6"
-		     placeholder="Option 6...">
+	    		     oninput="checkNext(6)">
 	  </div>
-	  <div class="form-group">
+	  <div class="form-group" id="fans6c">
 	    <label>
 	      <input type="checkbox"> Correct
 	    </label>
 	  </div>
 	  
-	  <button type="submit" class="btn btn-primary"
-		  onclick="goto('/create-question/' + unit_id);">Save</button>
+	  <button type="button" class="btn btn-primary"
+		  onclick="createQuestion(unit_id);">Save</button>
 	  <button type="button" class="btn btn-default" onclick="goto('/');">Finish</button>
 	</form>
       </div>
@@ -105,7 +105,15 @@
       var unit_id = getUnitId(window.location.href);
       var t = document.getElementById('utitle');
       t.innerHTML = "Unit " + unit_id;
-      console.log(t);
+      for( var i=2; i <= 6; i++)
+      {
+	 var id = "#fans" + i;
+	 console.log(id);
+	 $(id).hide();
+	 id += "c";
+	 console.log(id);
+	 $(id).hide();
+      }
     </script>
     
   </body>

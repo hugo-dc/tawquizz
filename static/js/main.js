@@ -52,3 +52,58 @@ var getUnitId = function(url)
     console.log(url);
     return 1;
 }
+
+// Create Answers
+var createAnswers = function()
+{
+}
+
+// Create Question and Answers in DataBase
+var createQuestion = function(unit)
+{
+    var q = $('#question').val();
+    var a = new Array();
+    a[0] = $('#ans1').val();
+    a[1] = $('#ans2').val();
+    a[2] = $('#ans3').val();
+    a[3] = $('#ans4').val();
+    a[4] = $('#ans5').val();
+    a[5] = $('#ans6').val();
+    a[6] = $('#ans7').val();
+
+    if (q !== "" &&
+	a[0] !== "" )
+    {
+	$.post("localhost:3000/save-question",
+	       {
+		   cqUnit : unit,
+		   cqText : text,
+		   cqExpl : expl
+	       },
+	       function(data, status)
+	       {
+		   console.log(data);
+		   console.log(status);
+	       });
+    }
+}
+
+var checkNext = function(n)
+{
+    var id = '#ans' + n;
+    var val = $(id)[0].value;
+    var fansid = "#fans" + (n+1);    
+    if(val !== ""){
+	$(fansid).show(1000);
+	$(fansid + "c").show(1000);
+    }else{
+	var nextId = "#ans" + ( n + 1);
+	if( $(nextId).val() !== ""){
+	    $(id)[0].value = $(nextId).val();
+	    $(nextId)[0].value = "";
+	}else{
+	    $(fansid).hide(1000);
+	    $(fansid + "c").hide(1000);
+	}
+    }
+}
