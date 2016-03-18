@@ -37,6 +37,11 @@ data CrQuestion = CrQuestion {
   cqExpl :: String
   } deriving (Show, Generic)
 
+data Code = Code {
+  code :: String,
+  lang :: String
+  } deriving (Show, Generic)
+
 data Answer = Answer {
   anId      :: Int,
   anParent  :: Int,
@@ -50,8 +55,18 @@ data CrAnswer = CrAnswer {
   caCorrect :: Bool
   } deriving (Show, Generic)
 
+
+data DBInt = DBInt {
+  dbInt :: Int
+  } deriving (Show)
+
+instance FromRow DBInt where
+  fromRow = DBInt <$> field
+
 instance ToJSON Result
 instance FromJSON Result
+
+instance FromJSON CrQuestion
 
 instance FromRow DBTable where
   fromRow = DBTable <$> field
@@ -63,6 +78,11 @@ instance ToJSON Unit
   
 instance ToRow Unit where
   toRow (Unit id name) = toRow [name]
+
+instance ToRow Question where
+  toRow (Question id unit text expl) = toRow (unit, text, expl)
+
+instance FromJSON Code  
 
 dbFile = "static/data/tawquizz.db"
 
@@ -137,6 +157,26 @@ getUnits' = do
   r <- query conn "SELECT * FROM unit" () :: IO [Unit]
   return r
 
+saveQuestion :: Int -> String -> String -> ActionM Int
+saveQuestion u q e = do
+  qid <- liftIO $ saveQuestion' u q e
+  return qid
+
+saveQuestion' :: Int -> String -> String -> IO Int
+saveQuestion' u q e = do
+  conn <- open dbFile
+  execute conn "INSERT INTO unit (name) VALUES (?)" (Question 0 u q e)
+  close conn
+  lq <- getLastQuestion' u
+  return lq
+
+getLastQuestion' :: Int -> IO Int
+getLastQuestion' u = do
+  conn <- open dbFile
+  c <- query conn "SELECT MAX (id) FROM question WHERE parent = ?" [u] :: IO [DBInt]
+  let qid = (dbInt . head) c
+  return qid
+  
 
 main :: IO ()
 main = scotty 3000 $ do
@@ -184,11 +224,18 @@ main = scotty 3000 $ do
     file "static/create-question.html"
   post "/save-question" $ do
     d <- body
+    liftIO $ putStrLn $ show d
     let n = decode d :: Maybe CrQuestion
+    liftIO $ putStrLn $ show n
     case n of
       Just question -> do
         qId <- saveQuestion (cqUnit question) (cqText question) (cqExpl question)
         json qId
       otherwise -> error "Question not created"
+  post "/test-me" $ do
+    d <- body
+    liftIO $ putStrLn $ show d
+    let t = decode d :: Maybe Code
+    liftIO $ putStrLn $ show t
 
 

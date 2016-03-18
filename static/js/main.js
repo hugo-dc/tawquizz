@@ -1,22 +1,18 @@
-var goto = function(page)
-{
+var goto = function(page){
     window.location = page;
 }
 
-var createUnit = function()
-{
+var createUnit = function(){
     var unit = document.getElementById("unit");
     if(unit.value === ""){
 	console.log("Empty");
 	document.getElementById('error').innerHTML = "Please provide a Unit name";
 	return;
     }
-
     window.location = "/create-unit/" + unit.value;
 }
 
-var loadUnits = function(data)
-{
+var loadUnits = function(data){
     var json = JSON.parse(data);
     var ul = document.getElementById("units"); 
     console.log(JSON.stringify(json));
@@ -61,8 +57,10 @@ var createAnswers = function()
 // Create Question and Answers in DataBase
 var createQuestion = function(unit)
 {
+    
     var q = $('#question').val();
     var a = new Array();
+    var text = $("#expl").val();
     a[0] = $('#ans1').val();
     a[1] = $('#ans2').val();
     a[2] = $('#ans3').val();
@@ -74,7 +72,14 @@ var createQuestion = function(unit)
     if (q !== "" &&
 	a[0] !== "" )
     {
-	$.post("localhost:3000/save-question",
+	console.log(q);
+	console.log(a[0]);
+	console.log(text);
+	console.log(unit);
+	console.log("Done");
+
+/*
+	$.post("../save-question",
 	       {
 		   cqUnit : unit,
 		   cqText : text,
@@ -85,6 +90,25 @@ var createQuestion = function(unit)
 		   console.log(data);
 		   console.log(status);
 	       });
+*/
+	var formData =  {
+		code: "main = do",
+		lang: "haskell"
+	};
+
+	console.log(JSON.stringify(formData));
+	
+	$.ajax({
+	    method: "POST",
+	    url: "http://localhost:3000/test-me",
+	    dataType: "json",
+	    data: JSON.stringify(formData),
+	    success: function(msg) {
+		alert("Data Saved: " + msg);
+	    },
+
+	    contentType: "application/json"
+	});
     }
 }
 

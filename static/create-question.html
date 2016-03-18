@@ -9,6 +9,10 @@
 
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/custom.css" type="text/css" />
+    
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -22,10 +26,11 @@
       </div>
       <div class="col-12x">
 	<h1 id="utitle"></h1>
-	<form>
+	<form id="form-question">
+	  <input type="hidden" name="tsUnit" id="unit" value=0>
 	  <div class="form-group">
 	    <label for="question">Question:</label>
-	    <input type="text" class="form-control" id="question"
+	    <input type="text" class="form-control" id="question" name="tsText"
 		   placeholder="Add the question here...">
 	  </div>
 	  <!-- Answers -->
@@ -86,9 +91,14 @@
 	      <input type="checkbox"> Correct
 	    </label>
 	  </div>
+	  <label>Explanation:</label>
+	  <div class="input-group" >
+	    <textarea id="expl" class="expl"></textarea>
+	  </div>
+	      
 	  
 	  <button type="button" class="btn btn-primary"
-		  onclick="createQuestion(unit_id);">Save</button>
+		  onclick="createQuestion(unit_id)">Save</button>
 	  <button type="button" class="btn btn-default" onclick="goto('/');">Finish</button>
 	</form>
       </div>
@@ -104,14 +114,13 @@
     <script>
       var unit_id = getUnitId(window.location.href);
       var t = document.getElementById('utitle');
+      $("#unit").value = unit_id;
       t.innerHTML = "Unit " + unit_id;
       for( var i=2; i <= 6; i++)
       {
 	 var id = "#fans" + i;
-	 console.log(id);
 	 $(id).hide();
 	 id += "c";
-	 console.log(id);
 	 $(id).hide();
       }
     </script>
