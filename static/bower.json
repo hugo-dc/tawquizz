@@ -1,0 +1,25 @@
+{
+  "name": "tawquizz",
+  "authors": [
+    "Jose Hugo De La Cruz Romero <hugo.delacruz@live.com.mx>"
+  ],
+  "description": "Quizz App",
+  "main": "index.html",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "quiz",
+    "app"
+  ],
+  "license": "MIT",
+  "homepage": "http://github.com/hugo-dc/tawquizz",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

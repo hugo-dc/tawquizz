@@ -34,7 +34,19 @@ data Question = Question {
 data CrQuestion = CrQuestion {
   cqUnit :: Int,
   cqText :: String,
-  cqExpl :: String
+  cqExpl :: String,
+  cqAns1 :: String,
+  cqCor1 :: Bool,
+  cqAns2 :: String,
+  cqCor2 :: Bool,
+  cqAns3 :: String,
+  cqCor3 :: Bool,
+  cqAns4 :: String,
+  cqCor4 :: Bool,
+  cqAns5 :: String,
+  cqCor5 :: Bool,
+  cqAns6 :: String,
+  cqCor6 :: Bool
   } deriving (Show, Generic)
 
 data Code = Code {
@@ -48,13 +60,6 @@ data Answer = Answer {
   anText    :: String,
   anCorrect :: Bool
 } deriving(Show, Generic)
-
-data CrAnswer = CrAnswer {
-  caParent :: Int,
-  caText   :: String,
-  caCorrect :: Bool
-  } deriving (Show, Generic)
-
 
 data DBInt = DBInt {
   dbInt :: Int
@@ -74,7 +79,11 @@ instance FromRow DBTable where
 instance FromRow Unit where
   fromRow = Unit <$> field <*> field
 
-instance ToJSON Unit  
+instance FromRow Question where
+  fromRow = Question <$> field <*> field <*> field <*> field
+  
+instance ToJSON Unit
+instance ToJSON Question
   
 instance ToRow Unit where
   toRow (Unit id name) = toRow [name]
@@ -82,6 +91,8 @@ instance ToRow Unit where
 instance ToRow Question where
   toRow (Question id unit text expl) = toRow (unit, text, expl)
 
+instance ToRow Answer where
+  toRow (Answer id parent text correct) = toRow (parent, text, correct)
 instance FromJSON Code  
 
 dbFile = "static/data/tawquizz.db"
@@ -101,7 +112,7 @@ createTab t conn
       execute_
         conn
         "CREATE TABLE answer (id INTEGER PRIMARY KEY, parent NUMERIC, text TEXT, correct BOOL)"
-        
+
 -- | Check single table
 checkTable :: String -> ActionM ()
 checkTable tname = do
@@ -146,6 +157,18 @@ createUnit' name = do
   close conn
   return $ Result True "Unit created"
 
+getQuestions :: Int -> ActionM [Question]
+getQuestions u = do
+  qs <- liftIO $ getQuestions' u
+  return qs
+
+getQuestions' :: Int -> IO [Question]
+getQuestions' u = do
+  conn <- open dbFile
+  r <- query conn "SELECT * FROM question WHERE parent = ?" [u] :: IO [Question]
+  return r
+                                                           
+  
 getUnits :: ActionM [Unit]
 getUnits = do
   us <- liftIO getUnits'
@@ -165,7 +188,7 @@ saveQuestion u q e = do
 saveQuestion' :: Int -> String -> String -> IO Int
 saveQuestion' u q e = do
   conn <- open dbFile
-  execute conn "INSERT INTO unit (name) VALUES (?)" (Question 0 u q e)
+  execute conn "INSERT INTO question (parent, text, explanation) VALUES (?, ?, ?)" (Question 0 u q e)
   close conn
   lq <- getLastQuestion' u
   return lq
@@ -176,7 +199,25 @@ getLastQuestion' u = do
   c <- query conn "SELECT MAX (id) FROM question WHERE parent = ?" [u] :: IO [DBInt]
   let qid = (dbInt . head) c
   return qid
-  
+
+saveAnswers :: Int -> [(String, Bool)] -> ActionM ()
+saveAnswers q xs= do
+  liftIO $ saveAnswers' q xs
+  return ()
+
+saveAnswers' :: Int -> [(String, Bool)] -> IO ()
+saveAnswers' _ []     = return ()
+saveAnswers' q (x:xs) = do
+  conn <- open dbFile
+  execute conn "INSERT INTO answer (parent, text, correct) VALUES (?, ?, ?)" (Answer 0 q (fst x) (snd x))
+  close conn
+  saveAnswers' q xs
+
+getAnswers :: [String] -> [Bool] -> [(String, Bool)]
+getAnswers []     []     = []
+getAnswers (x:xs) (y:ys) 
+  | null x    = getAnswers xs ys
+  | otherwise = (x, y) : getAnswers xs ys
 
 main :: IO ()
 main = scotty 3000 $ do
@@ -184,6 +225,8 @@ main = scotty 3000 $ do
   get "/" $ do
     file "static/index.html"
   get "/quizz" $ do
+    file "static/quizz.html"
+  get "/quizz/:qid" $ do
     file "static/quizz.html"
   get "/units" $ do
     file "static/units.html"
@@ -217,6 +260,17 @@ main = scotty 3000 $ do
   get "/get-units" $ do
     us <- getUnits
     json us
+  get "/get-questions/:unit" $ do
+    unit <- param "unit"
+    qs <- getQuestions unit
+    json qs
+  get "/get-first-question/:unit" $ do
+    unit <- param "unit"
+    qs <- getQuestions unit
+    if null qs then
+      error "No Questions found for this unit"
+    else
+      json (head qs)
   get "/startup" $ do
     res <- startup
     json res
@@ -228,14 +282,14 @@ main = scotty 3000 $ do
     let n = decode d :: Maybe CrQuestion
     liftIO $ putStrLn $ show n
     case n of
-      Just question -> do
-        qId <- saveQuestion (cqUnit question) (cqText question) (cqExpl question)
+      Just q -> do
+        qId <- saveQuestion (cqUnit q) (cqText q) (cqExpl q)
+        let ans = getAnswers [(cqAns1 q), (cqAns2 q), (cqAns3 q), (cqAns4 q), (cqAns5 q), (cqAns6 q)]
+                             [(cqCor1 q), (cqCor2 q), (cqCor3 q), (cqCor4 q), (cqCor5 q), (cqCor6 q)]
+        liftIO $ putStrLn $ show ans
+        saveAnswers qId ans
         json qId
       otherwise -> error "Question not created"
-  post "/test-me" $ do
-    d <- body
-    liftIO $ putStrLn $ show d
-    let t = decode d :: Maybe Code
-    liftIO $ putStrLn $ show t
+
 
 

@@ -23,7 +23,7 @@
       <div class="col-12x">
 	<h1 id="utitle"></h1>
 	<div>
-	  <ul id="units"></ul>
+	  <ul id="questions"></ul>
 	</div>
 	<button type="button" class="btn btn-primary"
 		onclick="goto('/create-question/' + unit_id);">Add question</button>
@@ -45,7 +45,7 @@
       var t = document.getElementById('utitle');
       t.innerHTML = "Unit " + unit_id;
       console.log(t);
+      callBackend('/get-questions/' + unit_id, loadQuestions);
     </script>
-    
   </body>
 </html>    
