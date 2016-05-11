@@ -1,15 +1,24 @@
 
-var app = angular.module('tawquizz',[]);
+var app = angular.module('tawquizz', []);
 
 app.controller('MainController', function($scope, $http) {
-    
-}
+    $scope.start = true;
+    $scope.create_u = false;
+
+
+    $scope.viewCreateUnit = function() {
+	console.log("enters");
+	$scope.create_u = true;
+	$scope.start = false;
+    }
+});
 
 var d = "";
 
 var goto = function(page){
     window.location = page;
 }
+
 
 var createUnit = function(){
     var unit = document.getElementById("unit");

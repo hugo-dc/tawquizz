@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="tawquizz" ng-controller="MainController">
   <head>
-<meta charset="utf-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
@@ -9,12 +9,11 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <script src="bower_components/angular/angular.min.js">
+    <script src="bower_components/angular/angular.js"></script>
     <script src="js/main.js" type="text/javascript"></script>
     <script>
-//      window.location = "/units";
+//     window.location = '/units';
     </script>
-
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -28,8 +27,26 @@
 	<div class="jumbotron">
 	</div>
 	<div class="col-12x">
+	  <div ng-show="start">
+	    <div>
+	      <ul id="units"></ul>
+	    </div>
+	    <button type="button" class="btn btn-primary"
+		    ng-click="viewCreateUnit();">Create Unit</button>
+	    <button type="button" class="btn btn-default" onclick="goto('quizz/all')">All Units Quizz</button>
+	  
+	  </div>
 	</div>
-	
+	<div ng-show="create_u">
+	  <fieldset>
+	    <label>Name:</label>
+	    <input id="unit" name="unit-name"/>
+	    <button type="submit" class="btn btn-primary"
+		    onclick="createUnit();">Create</button>
+	    <button type="button" class="btn btn-default"
+		    onclick="goto('/')">Cancel</button>
+	  </fieldset>
+	</div>
       </div>
     </div>
 
