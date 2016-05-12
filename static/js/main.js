@@ -2,17 +2,48 @@
 var app = angular.module('tawquizz', []);
 
 app.controller('MainController', function($scope, $http) {
-    $scope.start = true;
-    $scope.create_u = false;
+    $scope.SERVER = "http://localhost:3000/";
+    $scope.START  = 1;
+    $scope.CREATE = 2;
+    $scope.UNITS  = 3;
+    $scope.view = $scope.START;
+    $scope.units = [];
 
+    $scope.unit_name = "";
 
     $scope.viewCreateUnit = function() {
-	console.log("enters");
-	$scope.create_u = true;
-	$scope.start = false;
+	$scope.view = $scope.CREATE;
+    }
+
+    $scope.cancelCreate = function () {
+	$scope.view = $scope.START;
+	$scope.message = "";
+    }
+
+    $scope.createUnit = function() {
+	if ($scope.unit_name === "" ) {
+	    $scope.message = "Please provide a Unit name/title";
+	}else{
+	    // http://localhost:3000/create-unit/testing 
+	    $http.get($scope.SERVER + "create-unit/" + $scope.unit_name).success(function(data) {
+		$scope.message = "New Unit Created";
+		$scope.view = $scope.UNITS;
+		// Call a Haskell WS to get a list of all Units
+		$http.get($scope.SERVER + "get-units").success(function(data) {
+		    $scope.units = data;
+		}).error(function(data) {
+		    $scope.message = "Error occured retrieving units"; 
+		});
+		
+	    }).error(function (data) {
+		$scope.message = "Error on Unit creation";
+	    });
+	}
     }
 });
 
+
+//------
 var d = "";
 
 var goto = function(page){

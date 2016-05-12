@@ -230,8 +230,10 @@ main = scotty 3000 $ do
     file "static/quizz.html"
   get "/units" $ do
     file "static/units.html"
+    
   get "/create-unit" $ do
     file "static/create-unit.html"
+    
   get "/create-unit/:unit" $ do
     unit <- param "unit"
     r <- createUnit unit
@@ -239,9 +241,11 @@ main = scotty 3000 $ do
       redirect "/units"
     else
       error "Unit could not be created"
+
   get "/get-units" $ do
     us <- getUnits
     json us
+
   get "/unit/:unid" $ do
 --    unid <- param "unid"
     file "static/unit.html"

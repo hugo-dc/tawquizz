@@ -27,7 +27,10 @@
 	<div class="jumbotron">
 	</div>
 	<div class="col-12x">
-	  <div ng-show="start">
+	  <div>
+	    <p>{{message}}</p>
+	  </div>
+	  <div ng-show="view == START">
 	    <div>
 	      <ul id="units"></ul>
 	    </div>
@@ -37,15 +40,23 @@
 	  
 	  </div>
 	</div>
-	<div ng-show="create_u">
+	<div ng-show="view == CREATE">
 	  <fieldset>
 	    <label>Name:</label>
-	    <input id="unit" name="unit-name"/>
+	    <input id="unit" ng-model="unit_name"/>
 	    <button type="submit" class="btn btn-primary"
-		    onclick="createUnit();">Create</button>
+		    ng-click="createUnit();">Create</button>
 	    <button type="button" class="btn btn-default"
-		    onclick="goto('/')">Cancel</button>
+		    ng-click="cancelCreate();">Cancel</button>
 	  </fieldset>
+	  <p>{{unit_name}}</p>
+	</div>
+	<div ng-show="view == UNITS">
+	  <ul>
+	    <li ng-repeat="unit in units">
+	      {{unit.unId}} - {{unit.unName}}
+	    </li>
+	  </ul>
 	</div>
       </div>
     </div>
